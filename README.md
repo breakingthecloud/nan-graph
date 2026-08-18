@@ -9,6 +9,12 @@ traversal BFS/DFS, **blast radius**, **cost chain**, **fan-in / SPOF**, y filtra
 Cero infraestructura: funciona en Node.js, Cloudflare Workers, Lambda. **Zero deps** en el core
 (la importación YAML usa el paquete ligero `yaml`).
 
+## 📚 Developer Docs
+
+> Documentación completa para desarrolladores en [`docs/`](docs/index.md):
+> [Getting Started](docs/getting-started.md) · [Concepts](docs/concepts.md) ·
+> [API Reference](docs/api.md) · [Contribution](docs/contribution.md)
+
 ## Install
 
 ```bash
