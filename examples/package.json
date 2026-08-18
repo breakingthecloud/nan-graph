@@ -3,9 +3,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "blast-radius": "node examples/blast-radius-webapp.mjs"
+    "blast-radius": "node examples/blast-radius-webapp.mjs",
+    "tinkuy-agent": "node examples/tinkuy-nan-graph-agent.mjs"
   },
   "dependencies": {
-    "@carloscortezcloud/nan-graph": "^0.1.0"
+    "@carloscortezcloud/nan-graph": "^0.1.0",
+    "@carloscortezcloud/tinkuy-agent": "^0.8.0"
   }
 }

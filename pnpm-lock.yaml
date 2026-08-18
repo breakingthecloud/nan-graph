@@ -19,7 +19,30 @@ importers:
         specifier: ^2.0.0
         version: 2.1.9
 
+  examples:
+    dependencies:
+      '@carloscortezcloud/nan-graph':
+        specifier: ^0.1.0
+        version: 0.1.1
+      '@carloscortezcloud/tinkuy-agent':
+        specifier: ^0.8.0
+        version: 0.8.0
+
 packages:
+
+  '@carloscortezcloud/nan-graph@0.1.1':
+    resolution: {integrity: sha512-voUO/f9OmEB2qsRjg5VDxm0xC930RDayGHmYh08dM4pfw4rEXs2C52YGEXj9oXBgb3u6MFzoLlt+c0IsQKlr+w==}
+
+  '@carloscortezcloud/tinkuy-agent@0.8.0':
+    resolution: {integrity: sha512-JVkV6jazta0dMKKf6zPdQTlP9orviP8oiD44NtqCiX1IYUYHZ1P6z8hQOSoZlq6aGpYw1wYzgScgrMjTJMDmYw==}
+    peerDependencies:
+      '@carloscortezcloud/sayay-guard': '>=0.1.0'
+      '@carloscortezcloud/styrr-llm': '>=0.1.0'
+    peerDependenciesMeta:
+      '@carloscortezcloud/sayay-guard':
+        optional: true
+      '@carloscortezcloud/styrr-llm':
+        optional: true
 
   '@esbuild/aix-ppc64@0.21.5':
     resolution: {integrity: sha512-1SDgH6ZSPTlggy1yI6+Dbkiz8xzpHJEVAlF/AM1tHPLsf5STom9rwtjE4hKAF20FfXXNTFqEYXyJNWh1GiZedQ==}
@@ -529,6 +552,14 @@ packages:
     hasBin: true
 
 snapshots:
+
+  '@carloscortezcloud/nan-graph@0.1.1':
+    dependencies:
+      yaml: 2.9.0
+
+  '@carloscortezcloud/tinkuy-agent@0.8.0':
+    dependencies:
+      yaml: 2.9.0
 
   '@esbuild/aix-ppc64@0.21.5':
     optional: true
