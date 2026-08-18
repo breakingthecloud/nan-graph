@@ -1,0 +1,46 @@
+{
+  "name": "@carloscortezcloud/nan-graph",
+  "version": "0.1.0",
+  "description": "In-memory Architecture Graph engine — NanGraph, BFS/DFS traversal, blast radius, relationship filtering, cost chain. Fusion Ñan × BYaML (SOFE Architecture Graph).",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "pnpm build"
+  },
+  "keywords": [
+    "graph",
+    "architecture",
+    "dependency",
+    "blast-radius",
+    "traversal",
+    "topology",
+    "byaml",
+    "sofe"
+  ],
+  "author": "Carlos Cortez <carlos@finoptix.dev>",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/breakingthecloud/nan-graph"
+  },
+  "dependencies": {
+    "yaml": "^2.5.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0",
+    "vitest": "^2.0.0"
+  },
+  "type": "module"
+}
