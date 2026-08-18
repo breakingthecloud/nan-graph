@@ -1,0 +1,11 @@
+{
+  "name": "nan-graph-examples",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "blast-radius": "node examples/blast-radius-webapp.mjs"
+  },
+  "dependencies": {
+    "@carloscortezcloud/nan-graph": "^0.1.0"
+  }
+}

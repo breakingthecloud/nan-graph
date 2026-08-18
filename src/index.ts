@@ -1,6 +1,6 @@
 // nan-graph — In-memory Architecture Graph engine (fusión Ñan × BYaML / SOFE Architecture Graph)
-export { NanGraph } from './graph';
-export * from './types';
+export { NanGraph } from './graph.js';
+export * from './types.js';
 export {
   traverseBFS,
   traverseDFS,
@@ -9,6 +9,6 @@ export {
   teamCost,
   fanIn,
   singlePointsOfFailure,
-} from './traverse';
-export { fromObject, fromYaml, fromJson } from './importYaml';
-export type { GraphInput } from './importYaml';
+} from './traverse.js';
+export { fromObject, fromYaml, fromJson } from './importYaml.js';
+export type { GraphInput } from './importYaml.js';

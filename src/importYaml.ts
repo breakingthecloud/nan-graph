@@ -1,6 +1,6 @@
 import { parse } from 'yaml';
-import { NanGraph } from './graph';
-import type { GraphEdge, GraphNode } from './types';
+import { NanGraph } from './graph.js';
+import type { GraphEdge, GraphNode } from './types.js';
 
 export interface GraphInput {
   /** Map of id -> node props (dependency-graph.yaml style) OR array of GraphNode. */

@@ -1,4 +1,4 @@
-import type { GraphNode, GraphEdge, TraversalOptions } from './types';
+import type { GraphNode, GraphEdge, TraversalOptions } from './types.js';
 
 /**
  * NanGraph — in-memory directed multi-graph with typed relationships.

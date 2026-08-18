@@ -1,5 +1,5 @@
-import type { NanGraph } from './graph';
-import type { TraversalOptions } from './types';
+import type { NanGraph } from './graph.js';
+import type { TraversalOptions } from './types.js';
 
 function matches(relType: string, relTypes?: string[]): boolean {
   return relTypes === undefined || relTypes.length === 0 || relTypes.includes(relType);
