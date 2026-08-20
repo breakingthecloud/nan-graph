@@ -15,3 +15,11 @@ export {
 } from './traverse.js';
 export { fromObject, fromYaml, fromJson } from './importYaml.js';
 export type { GraphInput } from './importYaml.js';
+export type { NgSnapshot, SqliteStorageOptions } from './storage.js';
+export {
+  toNgBytes,
+  fromNgBytes,
+  saveNg,
+  loadNg,
+  SqliteGraphStore,
+} from './storage.js';
