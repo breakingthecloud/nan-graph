@@ -4,10 +4,11 @@
   "type": "module",
   "scripts": {
     "blast-radius": "node examples/blast-radius-webapp.mjs",
-    "tinkuy-agent": "node examples/tinkuy-nan-graph-agent.mjs"
+    "tinkuy-agent": "node examples/tinkuy-nan-graph-agent.mjs",
+    "impact-cost": "node examples/impact-cost-graph.mjs"
   },
   "dependencies": {
-    "@carloscortezcloud/nan-graph": "^0.1.0",
+    "@carloscortezcloud/nan-graph": "^0.2.0",
     "@carloscortezcloud/tinkuy-agent": "^0.8.0"
   }
 }
