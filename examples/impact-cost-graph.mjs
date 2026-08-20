@@ -56,3 +56,45 @@ console.log(`JSON: ${json.nodes.length} nodos, ${json.edges.length} aristas`);
 console.log('Costo total del grafo: $' + json.nodes.reduce((s, n) => s + n.monthly_cost, 0) + '/mes');
 console.log('\nMermaid:\n');
 console.log(mermaid);
+
+// ── Render Mermaid en un HTML autónomo (browser) ───────────────────────────
+import { writeFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
+
+const outFile = path.join(path.dirname(fileURLToPath(import.meta.url)), 'impact-cost-graph.html');
+const html = `<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<title>nan-graph v0.2.0 — Impact & Cost (Mermaid)</title>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({ startOnLoad: true, theme: 'default' });
+  const diagram = ${JSON.stringify(mermaid)};
+  document.getElementById('diagram').textContent = diagram;
+  mermaid.render('diagram', diagram).then(({ svg }) => {
+    document.getElementById('output').innerHTML = svg;
+  });
+</script>
+<style>
+  body { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; margin: 32px; color: #1f2937; }
+  h1 { font-size: 18px; }
+  .mermaid { margin: 20px 0; }
+  pre { background: #f3f4f6; padding: 12px; border-radius: 8px; font-size: 12px; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <h1>nan-graph v0.2.0 — Cost graph (Mermaid)</h1>
+  <p>Costo total del grafo: <strong>$${json.nodes.reduce((s, n) => s + n.monthly_cost, 0)}/mes</strong> — ${json.nodes.length} nodos, ${json.edges.length} aristas</p>
+  <div id="diagram" class="mermaid"></div>
+  <div id="output"></div>
+  <h2>Fuente Mermaid</h2>
+  <pre id="source"></pre>
+  <script>
+    document.getElementById('source').textContent = ${JSON.stringify(JSON.stringify(mermaid))};
+  </script>
+</body>
+</html>`;
+writeFileSync(outFile, html, 'utf8');
+console.log(`\n▶ Abre en el navegador: ${outFile}`);
