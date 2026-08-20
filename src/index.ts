@@ -9,6 +9,9 @@ export {
   teamCost,
   fanIn,
   singlePointsOfFailure,
+  impactScore,
+  criticalPath,
+  exportCostGraph,
 } from './traverse.js';
 export { fromObject, fromYaml, fromJson } from './importYaml.js';
 export type { GraphInput } from './importYaml.js';

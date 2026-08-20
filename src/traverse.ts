@@ -117,3 +117,94 @@ export function fanIn(graph: NanGraph, id: string): number {
 export function singlePointsOfFailure(graph: NanGraph, threshold = 3): string[] {
   return [...graph.nodes.keys()].filter((id) => fanIn(graph, id) >= threshold);
 }
+
+/**
+ * Impact scoring — affected downstream nodes weighted by relationship type + distance.
+ * Each edge walked contributes `baseWeight * (relWeight[relType] ?? 1) * decay^depth`.
+ * Returns node -> impact score (higher = more severe if `start` fails).
+ */
+export function impactScore(
+  graph: NanGraph,
+  start: string,
+  opts: {
+    maxDepth?: number;
+    relTypes?: string[];
+    relWeight?: Record<string, number>;
+    decay?: number;
+  } = {},
+): Record<string, number> {
+  const { maxDepth = Infinity, relTypes, relWeight = {}, decay = 0.5 } = opts;
+  const scores: Record<string, number> = {};
+  const visited = new Set<string>([start]);
+  const queue: Array<{ id: string; depth: number }> = [{ id: start, depth: 0 }];
+  while (queue.length) {
+    const { id, depth } = queue.shift()!;
+    if (depth >= maxDepth) continue;
+    for (const edge of graph['edges']) {
+      if (edge.from !== id || !matches(edge.relType, relTypes)) continue;
+      const target = edge.to;
+      if (visited.has(target)) continue;
+      visited.add(target);
+      const relW = relWeight[edge.relType] ?? 1;
+      scores[target] = Math.round(relW * Math.pow(decay, depth) * 100) / 100;
+      queue.push({ id: target, depth: depth + 1 });
+    }
+  }
+  return scores;
+}
+
+/**
+ * Critical path — shortest dependency chain from `from` to `to` (BFS, outgoing).
+ * Returns array of node ids [from, ..., to], or empty array if unreachable.
+ */
+export function criticalPath(graph: NanGraph, from: string, to: string, relTypes?: string[]): string[] {
+  if (from === to) return [from];
+  const prev = new Map<string, string>();
+  const queue = [from];
+  const visited = new Set<string>([from]);
+  while (queue.length) {
+    const current = queue.shift()!;
+    if (current === to) break;
+    for (const edge of graph['edges']) {
+      if (edge.from !== current || !matches(edge.relType, relTypes)) continue;
+      if (visited.has(edge.to)) continue;
+      visited.add(edge.to);
+      prev.set(edge.to, current);
+      queue.push(edge.to);
+    }
+  }
+  if (!visited.has(to)) return [];
+  const path: string[] = [];
+  let cursor: string | undefined = to;
+  while (cursor !== undefined) {
+    path.unshift(cursor);
+    cursor = prev.get(cursor);
+  }
+  return path;
+}
+
+/**
+ * Cost-annotated graph export — serializes nodes/edges with `monthly_cost` attached.
+ * Returns both a JSON object and a Mermaid `flowchart LR` string for visualization.
+ */
+export function exportCostGraph(graph: NanGraph, opts: { title?: string } = {}): {
+  json: { nodes: Array<Record<string, unknown>>; edges: Array<Record<string, unknown>> };
+  mermaid: string;
+} {
+  const nodes = [...graph.nodes.values()].map((n) => ({ ...n, monthly_cost: n.attrs?.monthly_cost ?? 0 }));
+  const edges = graph.edges.map((e) => ({ ...e }));
+  const json = { nodes, edges };
+
+  const lines: string[] = [];
+  if (opts.title) lines.push(`---\ntitle: ${opts.title}\n---`);
+  lines.push('flowchart LR');
+  for (const n of nodes) {
+    const cost = n.monthly_cost as number;
+    const label = n.label ?? n.id;
+    lines.push(`  ${n.id}["${label} ($${cost})"]`);
+  }
+  for (const e of edges) {
+    lines.push(`  ${e.from} -->|${e.relType}| ${e.to}`);
+  }
+  return { json, mermaid: lines.join('\n') };
+}

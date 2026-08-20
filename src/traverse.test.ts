@@ -8,6 +8,9 @@ import {
   teamCost,
   fanIn,
   singlePointsOfFailure,
+  impactScore,
+  criticalPath,
+  exportCostGraph,
 } from './traverse';
 
 /** Simple pipeline graph:
@@ -95,5 +98,51 @@ describe('owner / SPOF', () => {
       .addEdge({ from: 'db', to: 'sink', relType: 'writes' });
     expect(fanIn(g, 'db')).toBe(3);
     expect(singlePointsOfFailure(g, 3)).toEqual(['db']);
+  });
+});
+
+describe('impact score', () => {
+  it('weights by distance (decay) and relationship type', () => {
+    const g = buildGraph();
+    // api -> lambda (depth 0 -> relW 1) = 1; lambda -> ddb & s3 (depth 1 -> 0.5)
+    const scores = impactScore(g, 'api');
+    expect(scores['lambda']).toBe(1);
+    expect(scores['ddb']).toBe(0.5);
+    expect(scores['s3']).toBe(0.5);
+  });
+
+  it('applies per-relType weights and maxDepth', () => {
+    const g = buildGraph();
+    const scores = impactScore(g, 'api', { relWeight: { routes_to: 10, reads_writes: 1 }, maxDepth: 1 });
+    expect(scores['lambda']).toBe(10);
+    expect(scores['ddb']).toBeUndefined(); // depth 2 beyond maxDepth
+  });
+});
+
+describe('critical path', () => {
+  it('finds shortest dependency chain', () => {
+    const g = buildGraph();
+    expect(criticalPath(g, 'cdn', 'ddb')).toEqual(['cdn', 'api', 'lambda', 'ddb']);
+    expect(criticalPath(g, 'api', 's3')).toEqual(['api', 'lambda', 's3']);
+  });
+
+  it('returns [] for unreachable and [from] for same node', () => {
+    const g = buildGraph();
+    expect(criticalPath(g, 'ddb', 'cdn')).toEqual([]);
+    expect(criticalPath(g, 'api', 'api')).toEqual(['api']);
+  });
+});
+
+describe('cost graph export', () => {
+  it('serializes nodes with monthly_cost and a mermaid flowchart', () => {
+    const g = buildGraph();
+    const { json, mermaid } = exportCostGraph(g, { title: 'Pipeline' });
+    expect(json.nodes).toHaveLength(5);
+    expect(json.edges).toHaveLength(4);
+    const api = json.nodes.find((n) => n.id === 'api')!;
+    expect(api.monthly_cost).toBe(20);
+    expect(mermaid).toContain('flowchart LR');
+    expect(mermaid).toContain('api["api ($20)"]');
+    expect(mermaid).toContain('api -->|routes_to| lambda');
   });
 });
