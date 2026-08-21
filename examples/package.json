@@ -6,7 +6,8 @@
     "blast-radius": "node examples/blast-radius-webapp.mjs",
     "tinkuy-agent": "node examples/tinkuy-nan-graph-agent.mjs",
     "impact-cost": "node examples/impact-cost-graph.mjs",
-    "persistence": "node examples/persistence-storage.mjs"
+    "persistence": "node examples/persistence-storage.mjs",
+    "ecosystem": "node examples/ecosystem-byaml-v2.mjs"
   },
   "dependencies": {
     "@carloscortezcloud/nan-graph": "^0.3.0",
